@@ -5,12 +5,9 @@ set co to (count of nms)
 repeat with N from 1 to co
 	set li to li & N
 end repeat
-
 display dialog "Ready?" default button "OK"
-
 repeat with y from 18 to 21
 	try
-		
 		set rn to (random number from 1 to (count of li))
 		set ch to (item rn of li)
 		if rn is not equal to 1 and rn is not equal to (count of li) then
@@ -20,15 +17,11 @@ repeat with y from 18 to 21
 		else
 			set li to (items 1 through (rn - 1) of li)
 		end if
-		
-		
-		
 		set fi to (item ch of nms)
 		tell application "Finder"
 			set fld to "Mac:Users:Ben:Dropbox:Pictures:Desktops:"
 			set np to (fld & fi)
 		end tell
-		
 		tell application "System Events" to key code y using {option down}
 		delay 0.5
 		tell application "Finder" to set desktop picture to np
