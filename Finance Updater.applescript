@@ -12,20 +12,13 @@ tell application "Microsoft Excel"
 		set value of range "B16" to (cash as text)
 	end tell
 	tell worksheet "Investments"
-		set Dte to (current date)
-		set newdte to (do shell script "echo " & Dte & " | cut -d ' ' -f 1-4") as text
-		set usedte to (do shell script "date '+%m/%d/%Y' | cut -d '/' -f 2")
-		if usedte = "06" then
+		set newdte to (do shell script "echo " & (current date) & " | cut -d ' ' -f 1-4") as text
+		if (do shell script "date '+%m/%d/%Y' | cut -d '/' -f 2") = "06" then
 			repeat with x from 1 to 15
-				set Anam to "A" & x
-				if (value of range Anam as text) contains newdte then
-					set newx to x
-					set Bnam to "B" & newx
-					set Gnam to "G" & newx
-					set Lnam to "L" & newx
-					set value of range Bnam to tan
-					set value of range Gnam to vtsmx
-					set value of range Lnam to catm
+				if (value of range ("A" & x) as text) contains newdte then
+					set value of range ("B" & x) to tan
+					set value of range ("G" & x) to vtsmx
+					set value of range ("L" & x) to catm
 					exit repeat
 				end if
 			end repeat
