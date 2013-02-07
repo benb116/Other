@@ -1,5 +1,14 @@
 do shell script "open /Users/Ben/Dropbox/Financial/2013.xlsx"
-set cash to text returned of (display dialog "Enter the amount of cash." default answer "")
+repeat
+	tell application "Microsoft Excel"
+		set wrkbk to active workbook
+		tell worksheet "overview"
+			set cval to value of range "B16"
+		end tell
+		exit repeat
+	end tell
+end repeat
+set cash to text returned of (display dialog "Enter the amount of cash." default answer cval)
 set catm to (do shell script "curl http://www.google.com/finance?q=catm | grep 'ref_690507_l' | cut -d '>' -f 2 | cut -d '<' -f 1") as number
 set tan to (do shell script "curl http://www.google.com/finance?q=tan | grep 'ref_723029_l' | cut -d '>' -f 2 | cut -d '<' -f 1") as number
 set vtsmx to (do shell script "curl http://www.google.com/finance?q=vtsmx | grep '<span class=pr>'  | cut -d '>' -f 2 | cut -d '<' -f 1") as number
