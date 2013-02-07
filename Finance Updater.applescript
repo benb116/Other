@@ -13,7 +13,7 @@ tell application "Microsoft Excel"
 	end tell
 	tell worksheet "Investments"
 		set newdte to (do shell script "echo " & (current date) & " | cut -d ' ' -f 1-4") as text
-		if (do shell script "date '+%m/%d/%Y' | cut -d '/' -f 2") = "06" then
+		if (do shell script "date '+%m/%d/%Y' | cut -d '/' -f 2") = "01" then
 			repeat with x from 1 to 15
 				if (value of range ("A" & x) as text) contains newdte then
 					set value of range ("B" & x) to tan
