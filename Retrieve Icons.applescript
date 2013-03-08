@@ -20,11 +20,16 @@ repeat with singleapp in apppaths
 			set theicon to (item 1 of listoficns) as text
 		end if
 		if theicon = "" then
-			set theq to (choose from list listoficns with prompt "Which icon would you like to retrieve for " & appname & "?") as text
-			if theq is "false" then
-				error
+			set definetext to (POSIX path of (path to me)) & "Contents/Resources/appicon.txt"
+			set theicon to (do shell script "cat " & definetext & " | grep " & quotedappname & " | cut -d ':' -f 2")
+			if theicon = "" then
+				set theq to (choose from list listoficns with prompt "Which icon would you like to retrieve for " & appname & "?") as text
+				if theq is "false" then
+					error
+				end if
+				set theicon to theq as text
+				do shell script "echo " & appname & " : " & theicon & " >> " & definetext
 			end if
-			set theicon to theq as text
 		end if
 		set iconpath to resourcePath & theicon
 		if (count of apppaths) is greater than 1 then
