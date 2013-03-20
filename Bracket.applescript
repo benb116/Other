@@ -1,5 +1,10 @@
 set newlist to {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"}
+try
+	do shell script "rm -rf ~/desktop/Brackets"
+end try
+do shell script "mkdir ~/desktop/Brackets"
 repeat with yr from 1988 to 2012
+	delay 0.1
 	set fulltext to (do shell script "curl http://www.cbssports.com/collegebasketball/ncaa-tournament/history/yearbyyear/" & yr) as string
 	set f to 0
 	repeat with d from 1 to (count of paragraphs in fulltext)
@@ -15,10 +20,15 @@ repeat with yr from 1988 to 2012
 			end if
 		end repeat
 	end if
-	repeat with e from 1 to (count of goodt)
-		if (item e of goodt as text) contains "No." then
+	set goog to {}
+	repeat with x in goodt
+		if x contains "No. " then set end of goog to (x as text)
+	end repeat
+	goog
+	repeat with e from 1 to (count of goog)
+		if (item e of goog as text) contains "No." then
 			try
-				do shell script "echo '" & (item e of goodt as text) & "' >> " & (POSIX path of "/Users/Ben/Desktop/Brackets/" & yr & ".txt")
+				do shell script "echo '" & (item e of goog as text) & "' >> " & (POSIX path of "/Users/Ben/Desktop/Brackets/" & yr & ".txt")
 				
 			end try
 		end if
@@ -48,4 +58,8 @@ end repeat
 repeat with h from 1 to (count of finallist)
 	set item h of finallist to (round ((item h of finallist) * 100) / 100)
 end repeat
-finallist
+set finaltxt to ""
+repeat with x from 1 to 16
+	set finaltxt to finaltxt & "No. " & x & ": " & (item x of finallist as text) & "% win" & return
+end repeat
+display dialog finaltxt
