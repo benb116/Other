@@ -1,4 +1,4 @@
-set thekeychain to "Path/To/Keychain"
+set thekeychain to "~/Library/Keychains/login.keychain"
 do shell script "touch /Users/Ben/Desktop/pwd.txt"
 set websites to paragraphs of (do shell script "security dump-keychain " & thekeychain & " | grep 'srvr' | cut -d '\"' -f 4")
 repeat with sitename in websites
