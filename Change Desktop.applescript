@@ -1,30 +1,48 @@
-set li to {}
+global fld, nms, co
 set fld to (POSIX path of "/Users/Ben/Dropbox/Pictures/Desktops/")
 set nms to (paragraphs of (do shell script "ls " & fld))
 set co to (count of nms)
-repeat with N from 1 to co
-	set li to li & N
+tell application "System Events"
+	set theds to (get display name of every desktop)
+end tell
+set prev to {}
+repeat with theD in theds
+	set end of prev to prevdesk(theD)
 end repeat
-display dialog "Ready?" default button "OK"
-repeat with y from 18 to 21
-	try
-		set rn to (random number from 1 to (count of li))
-		set ch to (item rn of li)
-		if rn is not equal to 1 and rn is not equal to (count of li) then
-			set li to (items 1 thru (rn - 1) of li & items (rn + 1) thru -1 of li)
-		else if rn = 1 then
-			set li to (items 2 thru (count of li) of li)
-		else
-			set li to (items 1 through (rn - 1) of li)
-		end if
-		set fi to (item ch of nms)
-		tell application "Finder"
-			set fld to "Mac:Users:Ben:Dropbox:Pictures:Desktops:"
-			set np to (fld & fi)
+set new to {}
+repeat
+	set d1 to selectd()
+	if prev does not contain d1 and new does not contain d1 then
+		set end of new to d1
+		if (count of new) = (count of theds) then exit repeat
+	end if
+end repeat
+repeat with y from 1 to (count of theds)
+	setd((item y of new), (item y of theds))
+end repeat
+
+on prevdesk(theD)
+	tell application "System Events"
+		tell (every desktop whose display name is theD)
+			(get picture) as text
 		end tell
-		tell application "System Events" to key code y using {option down}
-		delay 0.5
-		tell application "Finder" to set desktop picture to np
-		delay 0.5
-	end try
-end repeat
+	end tell
+end prevdesk
+
+on selectd()
+	set rn to (random number from 1 to co)
+	set ch to (item rn of nms)
+	tell application "Finder"
+		set fld to "Mac:Users:Ben:Dropbox:Pictures:Desktops:"
+		set np to (fld & ch)
+	end tell
+	return np
+end selectd
+
+on setd(d, theD)
+	tell application "System Events"
+		tell (every desktop whose display name is theD)
+			set picture to file d
+		end tell
+	end tell
+end setd
