@@ -1,18 +1,22 @@
 set apppaths to (choose file of type ("app") default location "/Applications" with multiple selections allowed)
 repeat with singleapp in apppaths
 	try
-		set apppath to (POSIX path of singleapp)
-		set appname to (do shell script "echo " & apppath & " | cut -d '/' -f 3 | cut -d '.' -f 1")
+		tell application "Finder"
+			set appname to name of singleapp
+			set appname to (do shell script "echo " & appname & " | cut -d '.' -f 1")
+		end tell
+		set apppath to POSIX path of singleapp
 		set quotedappname to quoted form of appname
 		set resourcePath to quoted form of (apppath & "Contents/Resources/")
 		set allicns to (do shell script "ls " & resourcePath & " | grep 'icns'")
 		set listoficns to (paragraphs of allicns)
+		
 		set theicon to ""
 		if (count of listoficns) is not equal to 1 then
 			set possiblenames to {"icon.icns", "app.icns", "appicon.icns", appname & ".icns"}
 			repeat with possibleicon in listoficns
 				if possiblenames contains possibleicon then
-					set theicon to possibleicon
+					set theicon to possibleicon as text
 					exit repeat
 				end if
 			end repeat
@@ -31,6 +35,7 @@ repeat with singleapp in apppaths
 				do shell script "echo " & appname & " : " & theicon & " >> " & definetext
 			end if
 		end if
+		log theicon
 		set iconpath to resourcePath & theicon
 		if (count of apppaths) is greater than 1 then
 			set iconfolder to "~/Desktop/Icons/"
