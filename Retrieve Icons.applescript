@@ -3,7 +3,7 @@ repeat with singleapp in apppaths
 	try
 		tell application "Finder"
 			set appname to name of singleapp
-			set appname to (do shell script "echo " & appname & " | cut -d '.' -f 1")
+			set appname to quoted form of (do shell script "echo " & appname & " | cut -d '.' -f 1")
 		end tell
 		set apppath to POSIX path of singleapp
 		set quotedappname to quoted form of appname
@@ -24,7 +24,8 @@ repeat with singleapp in apppaths
 			set theicon to (item 1 of listoficns) as text
 		end if
 		if theicon = "" then
-			set definetext to (POSIX path of (path to me)) & "Contents/Resources/appicon.txt"
+			set definetext to quoted form of (POSIX path of (path to me)) & "Contents/Resources/appicon.txt"
+			do shell script "touch " & definetext
 			set theicon to (do shell script "cat " & definetext & " | grep " & quotedappname & " | cut -d ':' -f 2")
 			if theicon = "" then
 				set theq to (choose from list listoficns with prompt "Which icon would you like to retrieve for " & appname & "?") as text
