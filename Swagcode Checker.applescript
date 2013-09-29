@@ -104,15 +104,4 @@ on displaycode(newc, timemsg, isactive, needslink)
 	end if
 	
 end displaycode
-
-on openurl(pgurl)
-	tell application "Google Chrome"
-		activate
-		try
-			make new tab at end of tabs of window 1
-		on error
-			make new window
-		end try
-		set URL of last tab of window 1 to pgurl
-	end tell
-end openurl
+c
