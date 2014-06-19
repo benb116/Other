@@ -104,4 +104,4 @@ on displaycode(newc, timemsg, isactive, needslink)
 	end if
 	
 end displaycode
-c
+calctime
